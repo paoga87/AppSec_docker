@@ -1,0 +1,34 @@
+version: "3.7"
+services:
+  web:
+    build: ./webservice
+    image: appsec4:latest
+    ports:
+      - "8080:5000"
+    deploy:
+      mode: replicated
+      replicas: 2
+      resources:
+        limits:
+          cpus: "0.50"
+          memory: 50M
+        reservations:
+          cpus: "0.25"
+          memory: 30M
+    environment:
+      ADMIN_USER: admin
+      ADMIN_PWORD: /run/secrets/admin_pword
+      ADMIN_2FA: /run/secrets/admin_2fa
+      CSRF_KEY: /run/secrets/csrf_key
+    secrets:
+      - admin_pword
+      - admin_2fa
+      - csrf_key
+  
+secrets:
+  admin_pword:
+    external: true
+  admin_2fa:
+    external: true
+  csrf_key:
+    external: true
